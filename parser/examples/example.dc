@@ -1,0 +1,10 @@
+function Update(): Void {
+    var counter = globalStorage.counter;
+    globalStorage.counter = counter + 1;
+}
+
+function Main(): Void {
+    for (var i = 0; i < 10; i += 1) {
+        Update();
+    }
+}
