@@ -2,8 +2,8 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 
 cc_library(
     name = "decaf",
-    srcs = glob(["src/*.cpp"]),
-    hdrs = glob(["src/*.h"]),
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob(["src/**/*.h"]),
 )
 
 cc_test(

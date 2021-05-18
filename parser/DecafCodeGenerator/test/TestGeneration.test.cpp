@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "src/DecafCodeGenerator.h"
+#include "src/CodeGenerator.h"
 #include <fstream>
 
 // Demonstrate some basic assertions.
