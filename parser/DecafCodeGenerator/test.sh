@@ -1,0 +1,1 @@
+CC=clang-9 CXX=clang++-9 bazel test --test_output=all //:test --verbose_failures
