@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
-# SET( BINARY ${CMAKE_PROJECT_NAME} )
-# SET( LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR} )
+find_package(Threads)
+find_package(LLVM REQUIRED CONFIG)
+
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+include_directories(${LLVM_INCLUDE_DIRS})
+add_definitions(${LLVM_DEFINITIONS})
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -21,3 +27,9 @@ add_executable(
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+llvm_map_components_to_libnames(llvm_libs support core irreader)
+
+# Link against LLVM libraries
+target_link_libraries(${CMAKE_PROJECT_NAME}Lib ${llvm_libs})
+target_link_libraries(${CMAKE_PROJECT_NAME}Bin ${llvm_libs})

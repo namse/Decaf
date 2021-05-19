@@ -2,7 +2,7 @@
 #include <string>
 
 namespace Decaf {
-    class CodeGenerator
+    class Decaf
     {
         public:
             std::string ConvertToLLVM(std::string decafCode);

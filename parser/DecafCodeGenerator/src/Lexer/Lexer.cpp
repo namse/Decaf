@@ -66,7 +66,7 @@ namespace Decaf
         return std::make_pair(TokenType::Unknown, std::string(1, lastChar));
     }
 
-    std::unique_ptr<FunctionToken> Lexer::ConsumeFunctionToken()
+    std::shared_ptr<FunctionToken> Lexer::ConsumeFunctionToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::Function)
@@ -74,10 +74,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<FunctionToken>(string);
+        return std::make_shared<FunctionToken>(string);
     }
 
-    std::unique_ptr<VarToken> Lexer::ConsumeVarToken()
+    std::shared_ptr<VarToken> Lexer::ConsumeVarToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::Var)
@@ -85,10 +85,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<VarToken>(string);
+        return std::make_shared<VarToken>(string);
     }
 
-    std::unique_ptr<ForToken> Lexer::ConsumeForToken()
+    std::shared_ptr<ForToken> Lexer::ConsumeForToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::For)
@@ -96,10 +96,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<ForToken>(string);
+        return std::make_shared<ForToken>(string);
     }
 
-    std::unique_ptr<DoToken> Lexer::ConsumeDoToken()
+    std::shared_ptr<DoToken> Lexer::ConsumeDoToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::Do)
@@ -107,10 +107,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<DoToken>(string);
+        return std::make_shared<DoToken>(string);
     }
 
-    std::unique_ptr<WhileToken> Lexer::ConsumeWhileToken()
+    std::shared_ptr<WhileToken> Lexer::ConsumeWhileToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::While)
@@ -118,10 +118,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<WhileToken>(string);
+        return std::make_shared<WhileToken>(string);
     }
 
-    std::unique_ptr<InToken> Lexer::ConsumeInToken()
+    std::shared_ptr<InToken> Lexer::ConsumeInToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::In)
@@ -129,10 +129,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<InToken>(string);
+        return std::make_shared<InToken>(string);
     }
 
-    std::unique_ptr<CamelCaseIdentifierToken> Lexer::ConsumeCamelCaseIdentifierToken()
+    std::shared_ptr<CamelCaseIdentifierToken> Lexer::ConsumeCamelCaseIdentifierToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::CamelCaseIdentifier)
@@ -140,10 +140,10 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<CamelCaseIdentifierToken>(string);
+        return std::make_shared<CamelCaseIdentifierToken>(string);
     }
 
-    std::unique_ptr<PascalCaseIdentifierToken> Lexer::ConsumePascalCaseIdentifierToken()
+    std::shared_ptr<PascalCaseIdentifierToken> Lexer::ConsumePascalCaseIdentifierToken()
     {
         const auto [tokenType, string] = GetNextToken();
         if (tokenType != TokenType::PascalCaseIdentifier)
@@ -151,7 +151,7 @@ namespace Decaf
             throw UnexpectedTokenException(tokenType, string);
         }
 
-        return std::make_unique<PascalCaseIdentifierToken>(string);
+        return std::make_shared<PascalCaseIdentifierToken>(string);
     }
 
     void Lexer::ConsumeSingleCharacter(char character)

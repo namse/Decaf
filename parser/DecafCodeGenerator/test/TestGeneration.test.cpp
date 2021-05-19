@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "CodeGenerator.h"
+#include "Decaf.h"
 #include <fstream>
 #include <string>
 
@@ -12,9 +12,9 @@ function Main(): Void {
 }
 )CODE";
 
-  Decaf::CodeGenerator codeGenerator;
+  Decaf::Decaf decaf;
 
-  auto result = codeGenerator.ConvertToLLVM(decafFileString);
+  auto result = decaf.ConvertToLLVM(decafFileString);
 
   std::string expected = R"CODE(
 

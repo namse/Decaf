@@ -1,6 +1,7 @@
-#include "CodeGenerator.h"
+#include "Decaf.h"
 #include <fstream>
 #include <string>
+#include <iostream>
 
 // Demonstrate some basic assertions.
 int main()
@@ -10,9 +11,10 @@ function Main(): Void {
 }
 )CODE";
 
-  Decaf::CodeGenerator codeGenerator;
+  Decaf::Decaf decaf;
 
-  auto result = codeGenerator.ConvertToLLVM(decafFileString);
+  auto result = decaf.ConvertToLLVM(decafFileString);
+  std::cout << result << std::endl;
 
   std::string expected = R"CODE(
 

@@ -10,11 +10,11 @@ namespace Decaf
     class Parser
     {
     public:
-        std::vector<std::unique_ptr<Ast>> Parse(Lexer &lexer);
+        std::vector<std::shared_ptr<Ast>> Parse(Lexer &lexer);
 
     private:
-        std::unique_ptr<FunctionAst> ParseFunctionAst(Lexer &lexer);
-        std::unique_ptr<BlockAst> ParseBlockAst(Lexer &lexer);
+        std::shared_ptr<FunctionAst> ParseFunctionAst(Lexer &lexer);
+        std::shared_ptr<BlockAst> ParseBlockAst(Lexer &lexer);
     };
 
 }

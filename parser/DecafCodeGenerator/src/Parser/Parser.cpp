@@ -3,9 +3,9 @@
 namespace Decaf
 {
 
-    std::vector<std::unique_ptr<Ast>> Parser::Parse(Lexer &lexer)
+    std::vector<std::shared_ptr<Ast>> Parser::Parse(Lexer &lexer)
     {
-        std::vector<std::unique_ptr<Ast>> asts;
+        std::vector<std::shared_ptr<Ast>> asts;
         try
         {
             while (!lexer.IsEnd())
@@ -21,7 +21,7 @@ namespace Decaf
         return asts;
     }
 
-    std::unique_ptr<FunctionAst> Parser::ParseFunctionAst(Lexer &lexer)
+    std::shared_ptr<FunctionAst> Parser::ParseFunctionAst(Lexer &lexer)
     {
         lexer.ConsumeFunctionToken();
 
@@ -32,24 +32,24 @@ namespace Decaf
         // TODO : function parameter list
 
         lexer.ConsumeSingleCharacter(')');
-        
+
         lexer.ConsumeSingleCharacter(':');
 
         auto functionReturnTypeToken = lexer.ConsumePascalCaseIdentifierToken();
 
         auto blockAst = ParseBlockAst(lexer);
 
-        return std::make_unique<FunctionAst>(
+        return std::make_shared<FunctionAst>(
             std::move(functionNameToken),
             std::move(functionReturnTypeToken),
             std::move(blockAst));
     }
 
-    std::unique_ptr<BlockAst> Parser::ParseBlockAst(Lexer &lexer)
+    std::shared_ptr<BlockAst> Parser::ParseBlockAst(Lexer &lexer)
     {
         lexer.ConsumeSingleCharacter('{');
         // TODO : statements
         lexer.ConsumeSingleCharacter('}');
-        return std::make_unique<BlockAst>();
+        return std::make_shared<BlockAst>();
     }
 }

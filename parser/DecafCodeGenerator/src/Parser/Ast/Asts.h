@@ -40,9 +40,9 @@ namespace Decaf
     {
     public:
         FunctionAst(
-            std::unique_ptr<PascalCaseIdentifierToken> functionNameToken,
-            std::unique_ptr<PascalCaseIdentifierToken> functionReturnTypeToken,
-            std::unique_ptr<BlockAst> blockAst)
+            std::shared_ptr<PascalCaseIdentifierToken> functionNameToken,
+            std::shared_ptr<PascalCaseIdentifierToken> functionReturnTypeToken,
+            std::shared_ptr<BlockAst> blockAst)
             : Ast(AstType::Function),
               functionNameToken(std::move(functionNameToken)),
               functionReturnTypeToken(std::move(functionReturnTypeToken)),
@@ -50,10 +50,10 @@ namespace Decaf
         {
         }
 
-    private:
-        const std::unique_ptr<PascalCaseIdentifierToken> functionNameToken;
-        const std::unique_ptr<PascalCaseIdentifierToken> functionReturnTypeToken;
-        const std::unique_ptr<BlockAst> blockAst;
+    public:
+        const std::shared_ptr<PascalCaseIdentifierToken> functionNameToken;
+        const std::shared_ptr<PascalCaseIdentifierToken> functionReturnTypeToken;
+        const std::shared_ptr<BlockAst> blockAst;
     };
 
 }

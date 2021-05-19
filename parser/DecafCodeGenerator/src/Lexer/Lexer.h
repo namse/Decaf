@@ -14,14 +14,14 @@ namespace Decaf
             : code(code)
         {
         }
-        std::unique_ptr<FunctionToken> ConsumeFunctionToken();
-        std::unique_ptr<VarToken> ConsumeVarToken();
-        std::unique_ptr<ForToken> ConsumeForToken();
-        std::unique_ptr<DoToken> ConsumeDoToken();
-        std::unique_ptr<WhileToken> ConsumeWhileToken();
-        std::unique_ptr<InToken> ConsumeInToken();
-        std::unique_ptr<CamelCaseIdentifierToken> ConsumeCamelCaseIdentifierToken();
-        std::unique_ptr<PascalCaseIdentifierToken> ConsumePascalCaseIdentifierToken();
+        std::shared_ptr<FunctionToken> ConsumeFunctionToken();
+        std::shared_ptr<VarToken> ConsumeVarToken();
+        std::shared_ptr<ForToken> ConsumeForToken();
+        std::shared_ptr<DoToken> ConsumeDoToken();
+        std::shared_ptr<WhileToken> ConsumeWhileToken();
+        std::shared_ptr<InToken> ConsumeInToken();
+        std::shared_ptr<CamelCaseIdentifierToken> ConsumeCamelCaseIdentifierToken();
+        std::shared_ptr<PascalCaseIdentifierToken> ConsumePascalCaseIdentifierToken();
         void ConsumeSingleCharacter(char character);
         bool IsEnd();
 
