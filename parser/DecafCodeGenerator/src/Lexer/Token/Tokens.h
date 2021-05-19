@@ -1,10 +1,11 @@
+#pragma once
 #include <string>
 
 namespace Decaf
 {
     enum class TokenType
     {
-        Eof = -1,
+        Unknown = -1,
 
         // Keywords
         Function,
@@ -20,87 +21,114 @@ namespace Decaf
 
     class Token
     {
-        public:
-            static const Token EofToken;
+        
+    public:
+        virtual ~Token() = default;
+        // public:
+        //     Token(Token &&) = default;
+        //     Token(const Token &) = default;
+        Token &operator=(const Token &_)
+        {
+            return *this;
+        }
 
-        protected:
-            Token(std::string string)
-            : String(string)
-            {}
-        public:
-            const std::string String;
+    protected:
+        Token(std::string string, TokenType tokenType)
+            : string(string),
+              tokenType(tokenType)
+        {
+        }
+
+    public:
+        const std::string string;
+        const TokenType tokenType;
+    };
+
+    class UnknownToken : public Token
+    {
+    public:
+        UnknownToken(std::string string)
+            : Token(string, TokenType::Unknown)
+        {
+        }
     };
 
     class FunctionToken : public Token
     {
     public:
         FunctionToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::Function;
+            : Token(string, TokenType::Function)
+        {
+        }
+        const static std::string keyword;
     };
 
     class VarToken : public Token
     {
     public:
         VarToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::Var;
+            : Token(string, TokenType::Var)
+        {
+        }
+        const static std::string keyword;
     };
 
     class ForToken : public Token
     {
     public:
         ForToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::For;
+            : Token(string, TokenType::For)
+        {
+        }
+        const static std::string keyword;
     };
 
     class DoToken : public Token
     {
     public:
         DoToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::Do;
+            : Token(string, TokenType::Do)
+        {
+        }
+        const static std::string keyword;
     };
 
     class WhileToken : public Token
     {
     public:
         WhileToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::While;
+            : Token(string, TokenType::While)
+        {
+        }
+        const static std::string keyword;
     };
 
     class InToken : public Token
     {
     public:
         InToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::In;
+            : Token(string, TokenType::In)
+        {
+        }
+        const static std::string keyword;
     };
 
     class CamelCaseIdentifierToken : public Token
     {
     public:
         CamelCaseIdentifierToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::CamelCaseIdentifier;
+            : Token(string, TokenType::CamelCaseIdentifier)
+        {
+        }
     };
 
     class PascalCaseIdentifierToken : public Token
     {
     public:
         PascalCaseIdentifierToken(std::string string)
-            : Token(string)
-            {}
-        const TokenType tokenType = TokenType::PascalCaseIdentifier;
+            : Token(string, TokenType::PascalCaseIdentifier)
+        {
+        }
     };
 
 }

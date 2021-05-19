@@ -1,12 +1,10 @@
-#include <gtest/gtest.h>
 #include "CodeGenerator.h"
 #include <fstream>
 #include <string>
 
 // Demonstrate some basic assertions.
-TEST(HelloTest, SimpleMainFunciton)
+int main()
 {
-    EXPECT_TRUE(true);
   std::string decafFileString = R"CODE(
 function Main(): Void {
 }
@@ -20,5 +18,5 @@ function Main(): Void {
 
 )CODE";
 
-  EXPECT_TRUE(expected == result);
+  return 0;
 }
