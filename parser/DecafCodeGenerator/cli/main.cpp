@@ -17,7 +17,7 @@
 #include "llvm/Target/TargetOptions.h"
 namespace fs = std::experimental::filesystem;
 
-int ParseArgs(int argc, char **argv, std::string &inputFilePath, std::string &outputDirectoryPath)
+int ParseArgs(int argc, char **argv, std::string &inputFilePath, std::string &outputDirectoryPath, std::string &type)
 {
     CLI::App app{"Decaf Cli"};
     app.add_option("-i,--input", inputFilePath, "input .dc file path")
@@ -26,6 +26,15 @@ int ParseArgs(int argc, char **argv, std::string &inputFilePath, std::string &ou
     app.add_option("-o,--output", outputDirectoryPath, "output directory path for output.o file")
         ->required()
         ->check(CLI::ExistingDirectory);
+    app.add_option("-t,--type", type, "output file type. ll or o. default is o")
+        ->required()
+        ->check([](auto input) {
+            if (input != "o" && input != "ll")
+            {
+                return "type should be o or ll";
+            }
+            return "";
+        });
 
     CLI11_PARSE(app, argc, argv);
     return 0;
@@ -41,23 +50,9 @@ std::string ReadInputFile(const std::string &inputFilePath)
     return buffer.str();
 }
 
-int main(int argc, char **argv)
+int OutAsObjectFile(Decaf::Decaf &decaf, llvm::Module &module, std::string &decafFileString, std::string &outputDirectoryPath)
 {
-    std::string inputFilePath = "";
-    std::string outputDirectoryPath = "";
-    auto ret = ParseArgs(argc, argv, inputFilePath, outputDirectoryPath);
-    if (ret)
-    {
-        return ret;
-    }
-
-    auto decafFileString = ReadInputFile(inputFilePath);
-
-    auto context = std::make_unique<llvm::LLVMContext>();
-    auto module = std::make_unique<llvm::Module>("Decaf", *context);
-
-    Decaf::Decaf decaf;
-    decaf.LoadToLlvmModule(*module, decafFileString);
+    decaf.LoadToLlvmModule(module, decafFileString);
 
     // Initialize the target registry etc.
     llvm::InitializeAllTargetInfos();
@@ -67,7 +62,7 @@ int main(int argc, char **argv)
     llvm::InitializeAllAsmPrinters();
 
     auto TargetTriple = llvm::sys::getDefaultTargetTriple();
-    module->setTargetTriple(TargetTriple);
+    module.setTargetTriple(TargetTriple);
 
     std::string Error;
     auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
@@ -89,7 +84,7 @@ int main(int argc, char **argv)
     auto TheTargetMachine =
         Target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
 
-    module->setDataLayout(TheTargetMachine->createDataLayout());
+    module.setDataLayout(TheTargetMachine->createDataLayout());
 
     auto filename = "output.o";
     auto outputFilePath = fs::path(outputDirectoryPath).append(filename).string();
@@ -112,10 +107,58 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    pass.run(*module);
+    pass.run(module);
     dest.flush();
 
     llvm::outs() << "Wrote " << outputFilePath << "\n";
 
     return 0;
+}
+
+int OutAsLlFile(Decaf::Decaf &decaf, llvm::Module &module, std::string &decafFileString, std::string &outputDirectoryPath)
+{
+    auto llFileString = decaf.ConvertToLlvm(module, decafFileString);
+    auto filename = "output.ll";
+    auto outputFilePath = fs::path(outputDirectoryPath).append(filename).string();
+
+    std::cout << "Wrote " << outputFilePath << std::endl;
+    std::cout << llFileString << std::endl;
+
+    std::ofstream outFileStream(outputFilePath);
+    if (!outFileStream.is_open()) {
+        std::cerr << "Could not open file: " << std::endl;
+        return 1;
+    }
+
+    outFileStream << llFileString << std::flush;
+    outFileStream.close();
+
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    std::string inputFilePath = "";
+    std::string outputDirectoryPath = "";
+    std::string type = "";
+    auto ret = ParseArgs(argc, argv, inputFilePath, outputDirectoryPath, type);
+    if (ret)
+    {
+        return ret;
+    }
+
+    auto decafFileString = ReadInputFile(inputFilePath);
+
+    auto context = std::make_unique<llvm::LLVMContext>();
+    llvm::Module module("Decaf", *context);
+    Decaf::Decaf decaf;
+
+    if (type == "o")
+    {
+        return OutAsObjectFile(decaf, module, decafFileString, outputDirectoryPath);
+    }
+    else if (type == "ll")
+    {
+        return OutAsLlFile(decaf, module, decafFileString, outputDirectoryPath);
+    }
 }
