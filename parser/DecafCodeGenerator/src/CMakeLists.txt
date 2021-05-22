@@ -21,15 +21,9 @@ add_library(
   ${sourceFiles}
 )
 
-add_executable(
-  ${CMAKE_PROJECT_NAME}Bin
-  ${sourceFiles}
-)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 llvm_map_components_to_libnames(llvm_libs support core irreader)
 
 # Link against LLVM libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}Lib ${llvm_libs})
-target_link_libraries(${CMAKE_PROJECT_NAME}Bin ${llvm_libs})
