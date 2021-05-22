@@ -18,13 +18,11 @@ namespace Decaf
     class CodeGenerator
     {
     public:
-        CodeGenerator();
+        CodeGenerator(llvm::Module* module);
         void GenerateFunctionCode(std::shared_ptr<FunctionAst> functionAst);
-        std::string DumpAllCode();
 
     private:
-        const std::shared_ptr<llvm::LLVMContext> context;
-        const std::shared_ptr<llvm::Module> module;
+        llvm::Module* module;
         const std::shared_ptr<llvm::IRBuilder<>> builder;
         const std::map<std::string, llvm::Value *> namedValues;
     };

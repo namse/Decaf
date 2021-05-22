@@ -2,10 +2,9 @@
 
 namespace Decaf
 {
-    CodeGenerator::CodeGenerator()
-        : context(std::make_shared<llvm::LLVMContext>()),
-          module(std::make_shared<llvm::Module>("Decaf", *context)),
-          builder(std::make_shared<llvm::IRBuilder<>>(*context))
+    CodeGenerator::CodeGenerator(llvm::Module *module)
+        : module(module),
+          builder(std::make_shared<llvm::IRBuilder<>>(module->getContext()))
     {
     }
 
@@ -21,9 +20,9 @@ namespace Decaf
 
         // TODO - paramters type and function type
         std::vector<llvm::Type *> parameterTypes(0);
-        auto functionType = llvm::FunctionType::get(llvm::Type::getVoidTy(*context), parameterTypes, false);
+        auto functionType = llvm::FunctionType::get(llvm::Type::getVoidTy(module->getContext()), parameterTypes, false);
 
-        function = llvm::Function::Create(functionType, llvm::Function::ExternalLinkage, functionName, module.get());
+        function = llvm::Function::Create(functionType, llvm::Function::ExternalLinkage, functionName, module);
 
         // unsigned Idx = 0;
         // for (auto &Arg : F->args())
@@ -32,7 +31,7 @@ namespace Decaf
         // return F;
 
         // Create a new basic block to start insertion into.
-        auto basicBlock = llvm::BasicBlock::Create(*context, "entry", function);
+        auto basicBlock = llvm::BasicBlock::Create(module->getContext(), "entry", function);
         builder->SetInsertPoint(basicBlock);
 
         // Record the function arguments in the NamedValues map.
@@ -40,11 +39,11 @@ namespace Decaf
         // for (auto &Arg : TheFunction->args())
         //     NamedValues[std::string(Arg.getName())] = &Arg;
 
-        if (functionAst->functionReturnTypeToken->string == "Void") {
+        if (functionAst->functionReturnTypeToken->string == "Void")
+        {
             builder->CreateRetVoid();
         }
         // TODO : set return type
-        
 
         // if (Value *RetVal = Body->codegen())
         // {
@@ -60,17 +59,5 @@ namespace Decaf
         // // Error reading body, remove function.
         // TheFunction->eraseFromParent();
         // return nullptr;
-
-        
     }
-
-    std::string CodeGenerator::DumpAllCode()
-    {
-        std::string code;
-        llvm::raw_string_ostream ostream(code);
-        ostream << *module;
-        ostream.flush();
-        return code;
-    }
-
 }

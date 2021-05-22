@@ -7,18 +7,20 @@
 TEST(HelloTest, SimpleMainFunciton)
 {
     EXPECT_TRUE(true);
-  std::string decafFileString = R"CODE(
+    std::string decafFileString = R"CODE(
 function Main(): Void {
 }
 )CODE";
 
-  Decaf::Decaf decaf;
+    Decaf::Decaf decaf;
 
-  auto result = decaf.ConvertToLLVM(decafFileString);
+    llvm::LLVMContext context;
+    llvm::Module module("Decaf", context);
+    auto result = decaf.ConvertToLlvm(module, decafFileString);
 
-  std::string expected = R"CODE(
+    std::string expected = R"CODE(
 
 )CODE";
 
-  EXPECT_TRUE(expected == result);
+    EXPECT_TRUE(expected == result);
 }
