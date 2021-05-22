@@ -3,8 +3,4 @@ export CXX=/usr/bin/clang++
 
 bash ./build.sh
 
-pushd build
-
-ctest
-
-popd
+./build/test/DecafTest

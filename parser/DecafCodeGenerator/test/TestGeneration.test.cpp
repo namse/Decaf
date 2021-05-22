@@ -6,7 +6,6 @@
 // Demonstrate some basic assertions.
 TEST(HelloTest, SimpleMainFunciton)
 {
-    EXPECT_TRUE(true);
     std::string decafFileString = R"CODE(
 function Main(): Void {
 }
@@ -18,9 +17,14 @@ function Main(): Void {
     llvm::Module module("Decaf", context);
     auto result = decaf.ConvertToLlvm(module, decafFileString);
 
-    std::string expected = R"CODE(
+    std::string expected = R"CODE(; ModuleID = 'Decaf'
+source_filename = "Decaf"
 
+define void @Main() {
+entry:
+  ret void
+}
 )CODE";
 
-    EXPECT_TRUE(expected == result);
+    EXPECT_EQ(expected, result);
 }
